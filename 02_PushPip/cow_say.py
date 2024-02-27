@@ -1,6 +1,6 @@
 import argparse
 from io import StringIO
-from cowsay import cowsay, list_cows, read_dot_cow
+from cowsay import cowsay, list_cows, read_dot_cow, get_random_cow
 
 
 class Presets:
@@ -18,6 +18,11 @@ def read_file(file_name):
         with open(file_name, 'r') as file:
             return read_dot_cow(StringIO(file.read()))
     return None
+
+def get_cow(cow, random):
+    if random:
+        return get_random_cow()
+    return cow
 
 
 parser = argparse.ArgumentParser("Cowsay custom program")
@@ -51,11 +56,14 @@ parser.add_argument('-w', '--width',
                     default=40,
                     help='The width of the text bubble')
 parser.add_argument('-nw', '--not_wrap_text',
-                    action='store_true',
+                    action='store_false',
                     help="Whether text shouldn't be wrapped in the bubble")
 parser.add_argument('-f', '--file',
                     nargs='?',
                     default=None,
+                    help='File with a custom string representing a cow')
+parser.add_argument('-r', '--rand',
+                    action='store_true',
                     help='File with a custom string representing a cow')
 
 
@@ -65,7 +73,7 @@ if args.list:
     print(list_cows())
 else:
     print(cowsay(args.message,
-                 cow=args.cow,
+                 cow=get_cow(args.cow, args.rand),
                  preset=str(args.preset),
                  eyes=args.eyes,
                  tongue=args.tongue,
