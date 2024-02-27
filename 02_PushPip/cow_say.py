@@ -1,5 +1,23 @@
 import argparse
-from cowsay import cowsay, list_cows
+from io import StringIO
+from cowsay import cowsay, list_cows, read_dot_cow
+
+
+class Presets:
+    def __init__(self, p):
+        self.p = p
+        if p not in 'bdgpstwy' and p is not None:
+            raise(ValueError('Have not such preset'))
+
+    def __str__(self):
+        return self.p
+
+
+def read_file(file_name):
+    if args.file:
+        with open(file_name, 'r') as file:
+            return read_dot_cow(StringIO(file.read()))
+    return None
 
 
 parser = argparse.ArgumentParser("Cowsay custom program")
@@ -14,9 +32,43 @@ parser.add_argument('-c', '--cow',
 parser.add_argument('-l', '--list',
                     action='store_true',
                     help='List of cows')
+parser.add_argument('-p', '--preset',
+                    nargs='?',
+                    type=Presets,
+                    default=None,
+                    help='Presets of eyes and tongues')
+parser.add_argument('-e', '--eyes',
+                    nargs='?',
+                    default='oo',
+                    help='A custom eye string')
+parser.add_argument('-t', '--tongue',
+                    nargs='?',
+                    default='  ',
+                    help='A custom tongue string')
+parser.add_argument('-w', '--width',
+                    nargs='?',
+                    type=int,
+                    default=40,
+                    help='The width of the text bubble')
+parser.add_argument('-nw', '--not_wrap_text',
+                    action='store_true',
+                    help="Whether text shouldn't be wrapped in the bubble")
+parser.add_argument('-f', '--file',
+                    nargs='?',
+                    default=None,
+                    help='File with a custom string representing a cow')
+
 
 args = parser.parse_args()
+
 if args.list:
     print(list_cows())
 else:
-    print(cowsay(args.message, cow=args.cow))
+    print(cowsay(args.message,
+                 cow=args.cow,
+                 preset=str(args.preset),
+                 eyes=args.eyes,
+                 tongue=args.tongue,
+                 width=args.width,
+                 wrap_text=args.not_wrap_text,
+                 cowfile=read_file(args.file)))
