@@ -46,7 +46,7 @@ parser.add_argument('-e', '--eyes',
                     nargs='?',
                     default='oo',
                     help='A custom eye string')
-parser.add_argument('-t', '--tongue',
+parser.add_argument('-T', '--tongue',
                     nargs='?',
                     default='  ',
                     help='A custom tongue string')
@@ -55,7 +55,7 @@ parser.add_argument('-w', '--width',
                     type=int,
                     default=40,
                     help='The width of the text bubble')
-parser.add_argument('-nw', '--not_wrap_text',
+parser.add_argument('-n',
                     action='store_false',
                     help="Whether text shouldn't be wrapped in the bubble")
 parser.add_argument('-f', '--file',
@@ -78,5 +78,5 @@ else:
                  eyes=args.eyes,
                  tongue=args.tongue,
                  width=args.width,
-                 wrap_text=args.not_wrap_text,
+                 wrap_text=args.n,
                  cowfile=read_file(args.file)))
